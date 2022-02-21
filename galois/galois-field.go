@@ -16,9 +16,13 @@ func Mod(a, p int) int {
 //
 // Note that this functions does not check if p is a prime; the result may be unpredictable if p is not a prime!
 func Inverse(a, p int) int {
-	if a <= 0 {
+	if a < 0 {
 		panic("non-positive a")
 	}
+	if a == 0 {		// todo: though 0 works here, it should in fact return "none"
+		return 0
+	}
+
 	if a == 1 {  // the inverse of 1 is always 1
 		return 1
 	}
@@ -55,6 +59,16 @@ func Doubling(a, x, y, p int) (int, int) {
 
 // Add adds (x1, y1) and (x2, y2) on the elliptic curve y^2 = x^3 + ax + b over a finite field p.
 func Add(x1, y1, x2, y2, p int) (int, int) {
+	// todo: the 2 ifs are in fact wrong: currently I assume that (none, none) is (0, 0); it will cause problem when
+	// todo: (0, 0) is actually a point on the curve!
+	// todo: change to a point structure using bool to mark if it is none!
+	if x1 == 0 && y1 == 0 {
+		return x2, y2
+	}
+	if x2 == 0 && y2 == 0 {
+		return x1, y1
+	}
+
 	lambda := [2]int{y2 - y1, x2 - x1}
 	lambda2 := [2]int{lambda[0] * lambda[0], lambda[1] * lambda[1]}
 	x3 := [2]int{lambda2[0] - (x1 + x2) * lambda2[1], lambda2[1]}
@@ -78,8 +92,8 @@ func Add(x1, y1, x2, y2, p int) (int, int) {
 // using double-add algorithm (recursive). Vulnerable to timing analysis.
 func Multiply(a, x, y, k, p int) (int, int) {
 	switch {
-	case k < 0 || k > p:
-		panic("negative k or k > p, not implemented")
+	case k < 0:
+		panic("negative k, not implemented")
 
 	case k == 0:
 		return 0, 0
@@ -97,10 +111,10 @@ func Multiply(a, x, y, k, p int) (int, int) {
 	}
 }
 
-// MultiplyV2 an alternative loop version of double-add algorithm.
+// MultiplyV2 an alternative loop version of double-add algorithm. Vulnerable to timing analysis.
 func MultiplyV2(a, x, y, k, p int) (int, int) {
-	if k < 0 || k > p {
-		panic("negative k or k > p, not implemented")
+	if k < 0 {
+		panic("negative k, not implemented")
 	}
 	tx1, ty1, tx2, ty2, initialized := x, y, 0, 0, false
 	for k != 0 {

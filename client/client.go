@@ -34,8 +34,7 @@ func (c *Client) PickK() {
 
 // GeneratePublicKey generates a public key. Should be called after PickK().
 func (c *Client) GeneratePublicKey() {
-	x, y := ecc.Generate(c.K, c.Ep)
-	c.PublicKey = [2]int{x, y}
+	c.PublicKey = ecc.Generate(c.K, c.Ep)
 }
 
 // SendPublicKey sends the public key to the channel.
@@ -51,5 +50,6 @@ func (c *Client) CalculateShareKey() (int, int) {
 	if msg == nil {
 		panic("no public key received")
 	}
-	return ecc.Calculate(msg.PublicKey[0], msg.PublicKey[1], c.K, c.Ep)
+	rs := ecc.Calculate(msg.PublicKey, c.K, c.Ep)
+	return rs[0], rs[1]
 }

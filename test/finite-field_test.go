@@ -24,6 +24,12 @@ func TestDoubling(t *testing.T) {
 	if r1, r2 := galois.Doubling(0, 1, 12, 17); r1 != 2 || r2 != 7 {
 		t.Error("wrong doubling, expecting (", 2, ", ", 7, "), got (", r1, ", ", r2, ")")
 	}
+	if r1, r2 := galois.Doubling(0, 5, 9, 17); r1 != 5 || r2 != 8 {
+		t.Error("wrong doubling, expecting (", 5, ", ", 8, "), got (", r1, ", ", r2, ")")
+	}
+	if r1, r2 := galois.Doubling(0, 8, 14, 17); r1 != 5 || r2 != 9 {
+		t.Error("wrong doubling, expecting (", 5, ", ", 9, "), got (", r1, ", ", r2, ")")
+	}
 }
 
 func TestAdd(t *testing.T) {
@@ -32,6 +38,15 @@ func TestAdd(t *testing.T) {
 	}
 	if r1, r2 := galois.Add(5, 8, 10, 15, 17); r1 != 6 || r2 != 11 {
 		t.Error("wrong addition, expecting (", 6, ", ", 11, "), got (", r1, ", ", r2, ")")
+	}
+	if r1, r2 := galois.Add(5, 8, 5, 9, 17); r1 != 0 || r2 != 0 {
+		t.Error("wrong addition, expecting (", 0, ", ", 0, "), got (", r1, ", ", r2, ")")
+	}
+	if r1, r2 := galois.Add(5, 8, 8, 14, 17); r1 != 8 || r2 != 3 {
+		t.Error("wrong addition, expecting (", 8, ", ", 3, "), got (", r1, ", ", r2, ")")
+	}
+	if r1, r2 := galois.Add(5, 8, 5, 9, 17); r1 != 0 || r2 != 0 {
+		t.Error("wrong addition, expecting (", 0, ", ", 0, "), got (", r1, ", ", r2, ")")
 	}
 }
 
@@ -51,6 +66,15 @@ func TestMultiple(t *testing.T) {
 	if r1, r2 := galois.Multiply(0,8, 3, 5, 17); r1 != 8 || r2 != 14 {
 		t.Error("wrong multiplying, expecting (", 8, ", ", 14, "), got (", r1, ", ", r2, ")")
 	}
+	if r1, r2 := galois.Multiply(0,15, 13, 20, 17); r1 != 2 || r2 != 10 {
+		t.Error("wrong multiplying, expecting (", 2, ", ", 10, "), got (", r1, ", ", r2, ")")
+	}
+	if r1, r2 := galois.Multiply(0,15, 13, 21, 17); r1 != 8 || r2 != 3 {
+		t.Error("wrong multiplying, expecting (", 8, ", ", 3, "), got (", r1, ", ", r2, ")")
+	}
+	if r1, r2 := galois.Multiply(0,5, 9, 7, 17); r1 != 5 || r2 != 9 {
+		t.Error("wrong multiplying, expecting (", 5, ", ", 9, "), got (", r1, ", ", r2, ")")
+	}
 
 	// testing with v2
 	if r1, r2 := galois.MultiplyV2(0,15, 13, 2, 17); r1 != 2 || r2 != 10 {
@@ -67,5 +91,14 @@ func TestMultiple(t *testing.T) {
 	}
 	if r1, r2 := galois.MultiplyV2(0,8, 3, 5, 17); r1 != 8 || r2 != 14 {
 		t.Error("wrong multiplying, expecting (", 8, ", ", 14, "), got (", r1, ", ", r2, ")")
+	}
+	if r1, r2 := galois.MultiplyV2(0,15, 13, 20, 17); r1 != 2 || r2 != 10 {
+		t.Error("wrong multiplying, expecting (", 2, ", ", 10, "), got (", r1, ", ", r2, ")")
+	}
+	if r1, r2 := galois.MultiplyV2(0,15, 13, 21, 17); r1 != 8 || r2 != 3 {
+		t.Error("wrong multiplying, expecting (", 8, ", ", 3, "), got (", r1, ", ", r2, ")")
+	}
+	if r1, r2 := galois.MultiplyV2(0,5, 9, 7, 17); r1 != 5 || r2 != 9 {
+		t.Error("wrong multiplying, expecting (", 5, ", ", 9, "), got (", r1, ", ", r2, ")")
 	}
 }
