@@ -4,7 +4,7 @@ import "simple-implementation-ECC/galois"
 
 // Elliptic y^2 = x^3 + a x + b over finite field P. Constructor NewElliptic().
 type Elliptic struct {
-	G 	*galois.Point
+	G 	galois.Point
 	A 	int
 	B 	int
 	P  	int
@@ -28,12 +28,12 @@ func (e *Elliptic) SetGeneratorPoint(x, y int) {
 
 // Generate returns (x`, y`) which is a k multiplication of G (x, y) on the elliptic curve e.
 // Should be called after SetGeneratorPoint().
-func Generate(k int, e *Elliptic) *galois.Point {
+func Generate(k int, e *Elliptic) galois.Point {
 	return galois.MultiplyV2(e.G, e.A, k, e.P)
 }
 
 // Calculate returns (x`, y`) which is a k multiplication of (x, y) on the elliptic curve e.
-func Calculate(xy *galois.Point, k int, e *Elliptic) *galois.Point {
+func Calculate(xy galois.Point, k int, e *Elliptic) galois.Point {
 	return galois.MultiplyV2(xy, e.A, k, e.P)
 }
 

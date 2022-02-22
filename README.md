@@ -34,6 +34,12 @@ https://math.stackexchange.com/questions/67171/calculating-the-modular-multiplic
 https://math.stackexchange.com/questions/1340484/addition-of-points-on-elliptic-curves-over-a-finite-field
 
 
+Note that, different from my common practice, the "Point" object is passed as a struct
+instead of a pointer. This will cause higher memory cost, but it simulates the ECC 
+process in a better way, as public keys are distributed across the net as real copies 
+(a stream of 0s and 1s) instead of a shared reference (usually 8-byte) to a single being.
+
+
 ### The Elliptic Curve
 
 
@@ -57,6 +63,11 @@ Including files "ecdh.go" and "gcm.go".
 The testing is based on the curve y^2 = x^3 + 0x + 7 (mod 17), with a generator
 point (15, 13). This is a very small sample used only for testing. Details of this curve
 can be found in the first link.
+
+
+Example of how to use my codes to simulate the ECDH key exchange process can be
+found in the test file "ecdh_test.go".
+
 
 ### TODO
 

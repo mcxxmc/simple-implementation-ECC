@@ -16,7 +16,7 @@ func SetDebug(b bool) {
 type EncryptedMsg struct {
 	Ciphertext       string 		// the encrypted message
 	Nonce            []byte 		// should have a length of 12
-	CiphertextPubKey *galois.Point 	// the public key used for encryption
+	CiphertextPubKey galois.Point 	// the public key used for encryption
 }
 
 // InstanceECDH an implementation of a hybrid encryption scheme by using the ECDH (Elliptic Curve Diffie–Hellman) key exchange scheme
@@ -37,7 +37,7 @@ func (ecdh *InstanceECDH) RandomlyPicksPrivateKey() {
 	ecdh.PrivateKey = rand.Intn(ecdh.Ep.P - 1) + 1		// 0 < k <= p
 }
 
-func (ecdh *InstanceECDH) PublicKey() (publicKey *galois.Point) {
+func (ecdh *InstanceECDH) PublicKey() (publicKey galois.Point) {
 	publicKey = Generate(ecdh.PrivateKey, ecdh.Ep)
 	return
 }
@@ -47,7 +47,7 @@ func (ecdh *InstanceECDH) PublicKey() (publicKey *galois.Point) {
 //
 // Use the sharedECCKey for symmetric encryption.
 // Use the randomly generated ciphertextPubKey to calculate the decryption key later.
-func (ecdh *InstanceECDH) calculateEncryptionKey(publicKey *galois.Point)  (sharedECCKey *galois.Point, ciphertextPubKey *galois.Point) {
+func (ecdh *InstanceECDH) calculateEncryptionKey(publicKey galois.Point)  (sharedECCKey galois.Point, ciphertextPubKey galois.Point) {
 	ciphertextPrivateKey := rand.Intn(ecdh.Ep.P - 1) + 1		// 0 < k <= p
 	// shared ecc key = random k` * public key from the other party = random k` * G * private key of the other party,
 	// since they agree on the same elliptic curve
@@ -63,7 +63,7 @@ func (ecdh *InstanceECDH) calculateEncryptionKey(publicKey *galois.Point)  (shar
 }
 
 // returns the sharedECCKey which is used for the decryption.
-func (ecdh *InstanceECDH) calculateDecryptionKey(ciphertextPubKey *galois.Point) (sharedECCKey *galois.Point) {
+func (ecdh *InstanceECDH) calculateDecryptionKey(ciphertextPubKey galois.Point) (sharedECCKey galois.Point) {
 	// here, shared ecc key = random k` from the other party * G * private key of this party
 	sharedECCKey = Calculate(ciphertextPubKey, ecdh.PrivateKey, ecdh.Ep)
 	if Debug {
@@ -74,7 +74,7 @@ func (ecdh *InstanceECDH) calculateDecryptionKey(ciphertextPubKey *galois.Point)
 }
 
 // Encrypt encrypts a message by a given public key and returns the ciphertext and the nonce.
-func (ecdh *InstanceECDH) Encrypt(msg string, publicKey *galois.Point) (encryptedMsg *EncryptedMsg, err error) {
+func (ecdh *InstanceECDH) Encrypt(msg string, publicKey galois.Point) (encryptedMsg *EncryptedMsg, err error) {
 	sharedECCKey, ciphertextPubKey := ecdh.calculateEncryptionKey(publicKey)
 	// the secret key is from the shared ecc key, so it is the same for both the sender and the receiver
 	secretKey := PointTo256bit(StringifyPublicKey(sharedECCKey))
@@ -97,6 +97,6 @@ func (ecdh *InstanceECDH) Decrypt(encryptedMsg *EncryptedMsg) (msg string, err e
 }
 
 // StringifyPublicKey converts the key to string.
-func StringifyPublicKey(key *galois.Point) string {
+func StringifyPublicKey(key galois.Point) string {
 	return fmt.Sprintf("%d,%d,%t", key.X, key.Y, key.IsNone)
 }

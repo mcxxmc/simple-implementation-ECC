@@ -3,6 +3,7 @@ package galois // Package galois is the package for finite field (or galois fiel
 // Point stands for a point on the 2D finite field.
 //
 // The attributes of a Point object should not be modified during calculation.
+// Therefore, it is always passed by struct instead of by pointer.
 type Point struct {
 	X 		int
 	Y 		int
@@ -10,17 +11,17 @@ type Point struct {
 }
 
 // NewPoint returns a pointer to a new Point object that is not none.
-func NewPoint(x, y int) *Point {
-	return &Point{X: x, Y: y, IsNone: false}
+func NewPoint(x, y int) Point {
+	return Point{X: x, Y: y, IsNone: false}
 }
 
 // NonePoint returns a pointer to a new Point object that is none.
-func NonePoint() *Point {
-	return &Point{X: 0, Y: 0, IsNone: true}
+func NonePoint() Point {
+	return Point{X: 0, Y: 0, IsNone: true}
 }
 
 // PointEqual checks if the 2 points are equal.
-func PointEqual(point1, point2 *Point) bool {
+func PointEqual(point1, point2 Point) bool {
 	if point1.IsNone == point2.IsNone && point1.X == point2.X && point1.Y == point2.Y {
 		return true
 	}
@@ -28,8 +29,8 @@ func PointEqual(point1, point2 *Point) bool {
 }
 
 // Copy returns a pointer to a deep copy of the Point object.
-func (p *Point) Copy() *Point {
-	return &Point{X: p.X, Y: p.Y, IsNone: p.IsNone}
+func Copy(p Point) Point {
+	return Point{X: p.X, Y: p.Y, IsNone: p.IsNone}
 }
 
 // Mod returns a mod p which is never negative.
@@ -80,9 +81,9 @@ func Inverse(a, p int) (int, bool) {
 // over the finite field p.		//todo: handling overflow
 //
 // Returns a New Point object.
-func Doubling(point *Point, a, p int) *Point {
+func Doubling(point Point, a, p int) Point {
 	if point.IsNone {
-		return point.Copy()
+		return Copy(point)
 	}
 	x, y := point.X, point.Y
 	lambda := [2]int{3 * x * x + a, 2 * y}		// nominator, denominator
@@ -104,12 +105,12 @@ func Doubling(point *Point, a, p int) *Point {
 // Add adds (x1, y1) and (x2, y2) on the elliptic curve y^2 = x^3 + ax + b over a finite field p.
 //
 // Returns a New Point object.
-func Add(point1, point2 *Point, a, p int) *Point {
+func Add(point1, point2 Point, a, p int) Point {
 	if point1.IsNone {
-		return point2.Copy()
+		return Copy(point2)
 	}
 	if point2.IsNone {
-		return point1.Copy()
+		return Copy(point1)
 	}
 	if PointEqual(point1, point2) {		// the algorithm is different when point1 == point2
 		return Doubling(point1, a, p)
@@ -152,7 +153,7 @@ func Add(point1, point2 *Point, a, p int) *Point {
 // using double-add algorithm (recursive). Vulnerable to timing analysis.
 //
 // Returns a New Point object.
-func Multiply(point *Point, a, k, p int) *Point {
+func Multiply(point Point, a, k, p int) Point {
 	if point.IsNone {
 		return NonePoint()
 	}
@@ -164,7 +165,7 @@ func Multiply(point *Point, a, k, p int) *Point {
 		return NonePoint()
 
 	case k == 1:
-		return point.Copy()
+		return Copy(point)
 
 	case k % 2 == 1:
 		point2 := Multiply(point, a, k - 1, p)
@@ -179,14 +180,14 @@ func Multiply(point *Point, a, k, p int) *Point {
 // MultiplyV2 an alternative loop version of double-add algorithm. Vulnerable to timing analysis.
 //
 // Returns a New Point object.
-func MultiplyV2(point *Point, a, k, p int) *Point {
+func MultiplyV2(point Point, a, k, p int) Point {
 	if point.IsNone {
 		return NonePoint()
 	}
 	if k < 0 {
 		panic("negative k, not implemented")
 	}
-	point1, point2 := point.Copy(), NonePoint()
+	point1, point2 := Copy(point), NonePoint()
 	for k != 0 {
 		if k & 1 == 1 {
 			point2 = Add(point1, point2, a, p)
