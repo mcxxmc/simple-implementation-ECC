@@ -2,8 +2,8 @@ package ecc
 
 import (
 	"fmt"
+	"github.com/mcxxmc/simple-implementation-ECC/galois"
 	"math/rand"
-	"simple-implementation-ECC/galois"
 )
 
 var Debug = false

@@ -2,8 +2,8 @@ package test
 
 import (
 	"fmt"
+	"github.com/mcxxmc/simple-implementation-ECC/ecc"
 	"math/rand"
-	"simple-implementation-ECC/ecc"
 	"testing"
 	"time"
 )
