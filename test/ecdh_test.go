@@ -8,14 +8,16 @@ import (
 	"time"
 )
 
-const loop = 10
+const loop = 100
 
 func TestECDH(t *testing.T) {
 	ep := ecc.SampleElliptic()
-	ep.SetGeneratorPoint([2]int{15, 13})
+	ep.SetGeneratorPoint(15, 13)
 	rand.Seed(time.Now().Unix())
 	alice := ecc.NewInstanceECDH(ep)
 	bob := ecc.NewInstanceECDH(ep)
+
+	//ecc.SetDebug(true)
 
 	for i := 0; i < loop; i ++ {
 		alice.RandomlyPicksPrivateKey()
@@ -56,4 +58,6 @@ func TestECDH(t *testing.T) {
 			return
 		}
 	}
+
+	//ecc.SetDebug(false)
 }

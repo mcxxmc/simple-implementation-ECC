@@ -7,20 +7,20 @@ import (
 
 func TestECC(t *testing.T) {
 	ep := ecc.SampleElliptic()
-	ep.SetGeneratorPoint([2]int{15, 13})
-	if r := ecc.Generate(2, ep); r[0] != 2 || r[1] != 10 {
+	ep.SetGeneratorPoint(15, 13)
+	if r := ecc.Generate(2, ep); r.X != 2 || r.Y != 10 {
 		t.Error("wrong generation, expecting (", 2, ", ", 10, "), got ", r)
 	}
-	if r := ecc.Generate(3, ep); r[0] != 8 || r[1] != 3 {
+	if r := ecc.Generate(3, ep); r.X != 8 || r.Y != 3 {
 		t.Error("wrong generation, expecting (", 8, ", ", 3, "), got ", r)
 	}
-	if r := ecc.Generate(6, ep); r[0] != 5 || r[1] != 8 {
+	if r := ecc.Generate(6, ep); r.X != 5 || r.Y != 8 {
 		t.Error("wrong generation, expecting (", 5, ", ", 8, "), got ", r)
 	}
-	if r := ecc.Generate(14, ep); r[0] != 12 || r[1] != 16 {
+	if r := ecc.Generate(14, ep); r.X != 12 || r.Y != 16 {
 		t.Error("wrong generation, expecting (", 12, ", ", 16, "), got ", r)
 	}
-	if r := ecc.Generate(15, ep); r[0] != 8 || r[1] != 14 {
+	if r := ecc.Generate(15, ep); r.X != 8 || r.Y != 14 {
 		t.Error("wrong generation, expecting (", 8, ", ", 14, "), got ", r)
 	}
 }
