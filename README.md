@@ -1,4 +1,4 @@
-# simple-implementation-ECC
+# simple-implementation-ecc
 
 
  A simple implementation for Elliptic Curve Cryptography. 
