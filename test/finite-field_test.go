@@ -1,7 +1,7 @@
 package test
 
 import (
-	"github.com/mcxxmc/simple-implementation-ECC/galois"
+	"github.com/mcxxmc/simple-implementation-ecc/galois"
 	"testing"
 )
 

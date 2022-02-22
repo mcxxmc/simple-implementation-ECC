@@ -2,7 +2,7 @@ package ecc
 
 import (
 	"fmt"
-	"github.com/mcxxmc/simple-implementation-ECC/galois"
+	"github.com/mcxxmc/simple-implementation-ecc/galois"
 	"math/rand"
 )
 

@@ -1,3 +1,3 @@
-module github.com/mcxxmc/simple-implementation-ECC
+module github.com/mcxxmc/simple-implementation-ecc
 
 go 1.16

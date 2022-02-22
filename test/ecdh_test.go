@@ -2,7 +2,7 @@ package test
 
 import (
 	"fmt"
-	"github.com/mcxxmc/simple-implementation-ECC/ecc"
+	"github.com/mcxxmc/simple-implementation-ecc/ecc"
 	"math/rand"
 	"testing"
 	"time"

@@ -1,7 +1,7 @@
 package test
 
 import (
-	"github.com/mcxxmc/simple-implementation-ECC/ecc"
+	"github.com/mcxxmc/simple-implementation-ecc/ecc"
 	"testing"
 )
 

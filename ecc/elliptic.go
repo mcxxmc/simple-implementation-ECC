@@ -1,6 +1,6 @@
 package ecc
 
-import "github.com/mcxxmc/simple-implementation-ECC/galois"
+import "github.com/mcxxmc/simple-implementation-ecc/galois"
 
 // Elliptic y^2 = x^3 + a x + b over finite field P. Constructor NewElliptic().
 type Elliptic struct {
