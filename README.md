@@ -62,7 +62,11 @@ Including files "ecdh.go" and "gcm.go".
 
 The testing is based on the curve y^2 = x^3 + 0x + 7 (mod 17), with a generator
 point (15, 13). This is a very small sample used only for testing. Details of this curve
-can be found in the first link.
+can be found in the first link. 
+
+
+Another testcase is y^2 = x^3 + 1 x + 1 (mod 23), with a generator point (3, 10),
+which is slightly bigger.
 
 
 Example of how to use my codes to simulate the ECDH key exchange process can be

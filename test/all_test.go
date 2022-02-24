@@ -8,5 +8,6 @@ func TestAll(t *testing.T) {
 	TestAdd(t)
 	TestMultiple(t)
 	TestECC(t)
-	TestECDH(t)
+	TestECDH1(t)
+	TestECDH2(t)
 }
