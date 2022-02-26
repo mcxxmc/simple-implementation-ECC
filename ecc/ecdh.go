@@ -52,6 +52,9 @@ func (ecdh *InstanceECDH) calculateEncryptionKey(publicKey galois.Point)  (share
 	// shared ecc key = random k` * public key from the other party = random k` * G * private key of the other party,
 	// since they agree on the same elliptic curve
 	sharedECCKey = Calculate(publicKey, ciphertextPrivateKey, ecdh.Ep)
+	// the finite field with publicKey as the generator point has a much smaller size compared with the original one.
+	// however, this ciphertextPubKey is not generated from the real private key; therefore, the real private key is
+	// hide and will not be derived from it.
 	ciphertextPubKey = Generate(ciphertextPrivateKey, ecdh.Ep)
 	if Debug {
 		fmt.Println("encryption publicKey: ", publicKey)

@@ -85,20 +85,19 @@ func Doubling(point Point, a, p int) Point {
 	if point.IsNone {
 		return Copy(point)
 	}
-	x, y := point.X, point.Y
-	lambda := [2]int{3 * x * x + a, 2 * y}		// nominator, denominator
-	x2 := [2]int{lambda[0] * lambda[0] - 2 * x * lambda[1] * lambda[1], lambda[1] * lambda[1]}
-	lambdaMulXMinusX2 := [2]int{lambda[0] * (x2[1] * x - x2[0]), lambda[1] * x2[1]}
-	y2 := [2]int{lambdaMulXMinusX2[0] - y * lambdaMulXMinusX2[1], lambdaMulXMinusX2[1]}
-	inverseX2, exist := Inverse(x2[1], p)
+
+	lambda := NewFraction(3 * point.X * point.X + a, 2 * point.Y)
+	fx := lambda.MulFrac(lambda).PlusInt(-2 * point.X)
+	fy := lambda.MulFrac(fx.PlusInt(-1 * point.X)).MulInt(-1).PlusInt(-1 * point.Y)
+	inverseX, exist := Inverse(fx.Denominator, p)
 	if !exist {
 		return NonePoint()
 	}
-	inverseY2, exist := Inverse(y2[1], p)
+	inverseY, exist := Inverse(fy.Denominator, p)
 	if !exist {
 		return NonePoint()
 	}
-	x, y = Mod(Mod(x2[0], p) * inverseX2, p), Mod(Mod(y2[0], p) * inverseY2, p)
+	x, y := Mod(Mod(fx.Nominator, p) * inverseX, p), Mod(Mod(fy.Nominator, p) * inverseY, p)
 	return NewPoint(x, y)
 }
 
@@ -116,35 +115,24 @@ func Add(point1, point2 Point, a, p int) Point {
 		return Doubling(point1, a, p)
 	}
 
-	x1, y1 := point1.X, point1.Y
-	x2, y2 := point2.X, point2.Y
-
-	lambda := [2]int{y2 - y1, x2 - x1}
-	lambda2 := [2]int{lambda[0] * lambda[0], lambda[1] * lambda[1]}
-	x3 := [2]int{lambda2[0] - (x1 + x2) * lambda2[1], lambda2[1]}
-	lambdaMulX1MinusX3 := [2]int{lambda[0] * (x3[1] * x1 - x3[0]), lambda[1] * x3[1]}
-	y3 := [2]int{lambdaMulX1MinusX3[0] - y1 * lambdaMulX1MinusX3[1], lambdaMulX1MinusX3[1]}
-
-	// the input to Inverse() should be non-negative
-	if x3[1] < 0 {
-		x3[0] *= -1
-		x3[1] *= -1
+	lambda := NewFraction(point2.Y - point1.Y, point2.X - point1.X)
+	fx := lambda.MulFrac(lambda).PlusInt(-1 * (point1.X + point2.X))
+	fy := lambda.MulFrac(fx.PlusInt(-1 * point1.X)).MulInt(-1).PlusInt(-1 * point1.Y)
+	if fx.Denominator < 0 {
+		fx = fx.Switch()
 	}
-	if y3[1] < 0 {
-		y3[0] *= -1
-		y3[1] *= -1
+	if fy.Denominator < 0 {
+		fy = fy.Switch()
 	}
-
-	inverseX3, exist := Inverse(x3[1], p)
+	inverseX, exist := Inverse(fx.Denominator, p)
 	if !exist {
 		return NonePoint()
 	}
-	inverseY3, exist := Inverse(y3[1], p)
+	inverseY, exist := Inverse(fy.Denominator, p)
 	if !exist {
 		return NonePoint()
 	}
-
-	x, y := Mod(Mod(x3[0], p) * inverseX3, p), Mod(Mod(y3[0], p) * inverseY3, p)
+	x, y := Mod(Mod(fx.Nominator, p) * inverseX, p), Mod(Mod(fy.Nominator, p) * inverseY, p)
 	return NewPoint(x, y)
 }
 
